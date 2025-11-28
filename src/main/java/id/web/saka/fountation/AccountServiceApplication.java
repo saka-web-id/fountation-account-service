@@ -1,0 +1,13 @@
+package id.web.saka.fountation;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class FountationAccountServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(FountationAccountServiceApplication.class, args);
+    }
+
+}
