@@ -1,21 +1,31 @@
 package id.web.saka.fountation.account.activity;
 
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.OffsetDateTime;
 
+@Table(value = "activity", schema = "account")
 public class Activity {
 
     public enum ActivityAction { LOGIN, LOGOUT, VIEW_PAGE, UPDATE_PROFILE, CHANGE_PASSWORD }
 
+    @Column("id")
     private long id;
 
+    @Column("account_id")
     private long accountId;
 
+    @Column("action")
     private ActivityAction action;
 
-    private String pageUrlPath;
+    @Column("uri_path")
+    private String uriPath;
 
+    @Column("actor_user_id")
     private long actorUserId;
 
+    @Column("action_at")
     private OffsetDateTime actionAt;
 
     public long getId() {
@@ -42,12 +52,12 @@ public class Activity {
         this.action = action;
     }
 
-    public String getPageUrlPath() {
-        return pageUrlPath;
+    public String getUriPath() {
+        return uriPath;
     }
 
-    public void setPageUrlPath(String pageUrlPath) {
-        this.pageUrlPath = pageUrlPath;
+    public void setUriPath(String uriPath) {
+        this.uriPath = uriPath;
     }
 
     public long getActorUserId() {

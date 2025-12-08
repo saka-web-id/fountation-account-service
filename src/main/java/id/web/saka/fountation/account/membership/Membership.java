@@ -1,25 +1,36 @@
 package id.web.saka.fountation.account.membership;
 
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.OffsetDateTime;
 
+@Table(value = "membership", schema = "account")
 public class Membership {
 
     public enum MembershipType{ FREE, STANDARD, PREMIUM, VIP };
 
     public enum MembershipStatus{ ACTIVE, INACTIVE, PENDING };
 
+    @Column("id")
     private Long id;
 
+    @Column("account_id")
     private Long accountId;
 
-    private MembershipType membershipType;
+    @Column("type")
+    private MembershipType type;
 
+    @Column("status")
     private MembershipStatus status;
 
+    @Column("created_at")
     private OffsetDateTime createdAt;
 
+    @Column("start_date")
     private OffsetDateTime startDate;
 
+    @Column("end_date")
     private OffsetDateTime endDate;
 
     public Long getId() {
@@ -38,12 +49,12 @@ public class Membership {
         this.accountId = accountId;
     }
 
-    public MembershipType getMembershipType() {
-        return membershipType;
+    public MembershipType getType() {
+        return type;
     }
 
-    public void setMembershipType(MembershipType membershipType) {
-        this.membershipType = membershipType;
+    public void setType(MembershipType type) {
+        this.type = type;
     }
 
     public MembershipStatus getStatus() {

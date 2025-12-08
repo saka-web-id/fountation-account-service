@@ -27,7 +27,7 @@ public class AccountService {
             dto.setAccountStatus(account.getStatus());
             dto.setAccountNumber(account.getAccountNumber());
             dto.setCreatedAt(account.getCreatedAt());
-            dto.setMembershipType(membership.getMembershipType());
+            dto.setMembershipType(membership.getType());
             dto.setMembershipStartDate(membership.getStartDate());
             dto.setMembershipEndDate(membership.getEndDate());
             return dto;

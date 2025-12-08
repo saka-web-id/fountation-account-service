@@ -1,25 +1,28 @@
 package id.web.saka.fountation.account;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
 
-@Table("account")
+@Table(value = "account", schema = "account")
 public class Account{
 
     public enum AccountStatus{ ACTIVE, INACTIVE, DISABLE };
 
-    @JsonProperty("id")
+    @Column("id")
     private Long id;
 
-    @JsonProperty("userId")
+    @Column("user_id")
     private Long userId;
 
+    @Column("account_number")
     private String accountNumber;
 
+    @Column("status")
     private AccountStatus status;
 
+    @Column("created_at")
     private OffsetDateTime createdAt;
 
     public Long getId() {
