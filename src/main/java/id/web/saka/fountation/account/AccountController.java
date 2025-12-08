@@ -5,13 +5,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.Random;
 
 @RestController
 public class AccountController {
+
+    private final AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @GetMapping(value = "/accounts")
     public Account generateRandom() {
@@ -21,7 +29,14 @@ public class AccountController {
 
         System.out.println(authorities);
 
-        return new Account( "" + new Random().nextInt(100), "test");
+        //return new Account( "" + new Random().nextInt(100), "test");
+        return null;
+    }
+
+    @GetMapping(value = "/account/membership/detail/{userId}")
+    public Mono<AccountMembershipDTO> getAccountMembershipDetailByUserId(@PathVariable Long userId) {
+
+        return accountService.getAccountMembershipDetailByUserId(userId);
     }
 
 }

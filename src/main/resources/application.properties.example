@@ -1,24 +1,31 @@
 server:
-  port: 0
+    port: 0
 spring:
-  application:
-    name: fountation-account-service
-  main:
-    web-application-type: reactive
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: lb://fountation-authorization-service/oauth2/jwks
+    application:
+        name: fountation-account-service
+    main:
+        web-application-type: reactive
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    audiences:
+                        - https://XXXXXXXXXXXXXXXXXXXXXXXXXXXX.us.auth0.com/api/v2/
+                    issuer-uri: https://XXXXXXXXXXXXXXXXXXXXXXXXXXXX.us.auth0.com/
+                    jwk-set-uri: https://XXXXXXXXXXXXXXXXXXXXXXXXXXXX.us.auth0.com/.well-known/jwks.json
+    r2dbc:
+        url: r2dbc:postgresql://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1232/XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        username: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        password: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/ # Adjust Eureka server address if needed
-    fetchRegistry: true
-    registerWithEureka: false # Gateway does not need to register itself
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_URI:http://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1233/eureka}
+    instance:
+        preferIpAddress: false
 logging:
-  level:
-    org:
-      springframework:
-        security:
-          oauth2: TRACE
+    level:
+        org:
+            springframework:
+                security:
+                    oauth2: TRACE
