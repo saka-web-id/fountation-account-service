@@ -12,7 +12,7 @@ public class MembershipService {
         this.membershipRepository = membershipRepository;
     }
 
-    public Mono<Membership> findMembershipByAccountId(Mono<Long> accountIdMono) {
-        return accountIdMono.flatMap(membershipRepository::findByAccountId);
+    public Mono<Membership> findMembershipByAccountId(Long accountId) {
+        return membershipRepository.findByAccountId(accountId);
     }
 }

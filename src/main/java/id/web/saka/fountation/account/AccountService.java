@@ -18,19 +18,23 @@ public class AccountService {
     }
 
     public Mono<AccountMembershipDTO> getAccountMembershipDetailByUserId(Long userId) {
+        return this.accountRepository.findFirstByUserId(userId)
+                .flatMap(account ->
+                        this.membershipService.findMembershipByAccountId(account.getId())
+                                .flatMap(membership -> {
+                                    AccountMembershipDTO dto = new AccountMembershipDTO();
 
-        Mono<Account> accountMono = this.accountRepository.findFirstByUserId(userId);
-        Mono<Membership> membershipMono = this.membershipService.findMembershipByAccountId(accountMono.map(Account::getId));
+                                    dto.setAccountNumber(account.getAccountNumber());
+                                    dto.setAccountStatus(account.getStatus());
+                                    dto.setMembershipType(membership.getType());
+                                    dto.setMembershipStatus(membership.getStatus());
+                                    dto.setCreatedAt(account.getCreatedAt());
+                                    dto.setMembershipStartDate(membership.getStartDate());
+                                    dto.setMembershipEndDate(membership.getEndDate());
 
-        return Mono.zip(accountMono, membershipMono, (account, membership) -> {
-            AccountMembershipDTO dto = new AccountMembershipDTO();
-            dto.setAccountStatus(account.getStatus());
-            dto.setAccountNumber(account.getAccountNumber());
-            dto.setCreatedAt(account.getCreatedAt());
-            dto.setMembershipType(membership.getType());
-            dto.setMembershipStartDate(membership.getStartDate());
-            dto.setMembershipEndDate(membership.getEndDate());
-            return dto;
-        });
+                                    return Mono.just(dto);
+                                })
+                );
     }
+
 }

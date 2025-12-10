@@ -13,7 +13,9 @@ public class Config {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.authorizeExchange(auth -> auth.pathMatchers("/health").permitAll())
+        http
+                .authorizeExchange(auth -> auth.pathMatchers("/account/health").permitAll())
+                .authorizeExchange(auth -> auth.pathMatchers("/account/membership/detail/**").hasAuthority("SCOPE_internal:service"))
                 .authorizeExchange(auth -> auth.anyExchange().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
