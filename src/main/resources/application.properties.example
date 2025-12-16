@@ -1,5 +1,8 @@
 server:
     port: 0
+    error:
+        include-binding-errors: always
+        include-message: always
 spring:
     application:
         name: fountation-account-service
