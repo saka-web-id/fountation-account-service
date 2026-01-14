@@ -1,5 +1,7 @@
 package id.web.saka.fountation.account;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -15,6 +17,8 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/v0")
 public class AccountController {
+
+    Logger log = LoggerFactory.getLogger(AccountController.class);
 
     private final AccountService accountService;
 
@@ -34,9 +38,10 @@ public class AccountController {
         return null;
     }
 
-    @GetMapping(value = "/account/membership/detail/{userId}")
-    public Mono<AccountMembershipDTO> getAccountMembershipDetailByUserId(@PathVariable Long userId) {
-
+    /*"/api/v0/account/membership/detail/companyId/" + companyId + "/userId/" + userId)*/
+    @GetMapping(value = "/account/membership/detail/companyId/{companyId}/userId/{userId}")
+    public Mono<AccountMembershipDTO> getAccountMembershipDetailByUserId(@PathVariable Long companyId, @PathVariable Long userId) {
+        log.info("Fetching AccountMembershipDTO for userId: " + userId + " in companyId: " + companyId);
         return accountService.getAccountMembershipDetailByUserId(userId);
     }
 
