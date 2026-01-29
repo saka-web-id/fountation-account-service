@@ -1,15 +1,20 @@
 package id.web.saka.fountation.account;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 @Table(value = "account", schema = "account")
 public class Account{
 
     public enum AccountStatus{ ACTIVE, INACTIVE, DISABLE };
 
+    public enum AccountType{ SAVINGS, CHECKING, BUSINESS, JOINT };
+
+    @Id
     @Column("id")
     private Long id;
 
@@ -17,13 +22,16 @@ public class Account{
     private Long userId;
 
     @Column("account_number")
-    private String accountNumber;
+    private String number;
+
+    @Column("account_type")
+    private AccountType type;
 
     @Column("status")
     private AccountStatus status;
 
     @Column("created_at")
-    private OffsetDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     public Long getId() {
         return id;
@@ -41,12 +49,20 @@ public class Account{
         this.userId = userId;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
     }
 
     public AccountStatus getStatus() {
@@ -57,11 +73,23 @@ public class Account{
         this.status = status;
     }
 
-    public OffsetDateTime getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", number='" + number + '\'' +
+                ", type='" + type + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

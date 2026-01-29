@@ -1,6 +1,6 @@
 package id.web.saka.fountation.util.converter.account.membership;
 
-import id.web.saka.fountation.account.membership.Membership;
+import id.web.saka.fountation.membership.Membership;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 

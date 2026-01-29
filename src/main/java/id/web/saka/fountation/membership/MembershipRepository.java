@@ -1,4 +1,4 @@
-package id.web.saka.fountation.account.membership;
+package id.web.saka.fountation.membership;
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;

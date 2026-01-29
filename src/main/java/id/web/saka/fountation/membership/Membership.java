@@ -1,37 +1,38 @@
-package id.web.saka.fountation.account.membership;
+package id.web.saka.fountation.membership;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 @Table(value = "membership", schema = "account")
 public class Membership {
 
-    public enum MembershipType{ FREE, STANDARD, PREMIUM, VIP };
-
     public enum MembershipStatus{ ACTIVE, INACTIVE, PENDING };
 
+    @Id
     @Column("id")
     private Long id;
 
     @Column("account_id")
     private Long accountId;
 
-    @Column("type")
-    private MembershipType type;
+    @Column("plan_id")
+    private Long planId;
 
     @Column("status")
     private MembershipStatus status;
 
     @Column("created_at")
-    private OffsetDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column("start_date")
-    private OffsetDateTime startDate;
+    private ZonedDateTime startDate;
 
     @Column("end_date")
-    private OffsetDateTime endDate;
+    private ZonedDateTime endDate;
 
     public Long getId() {
         return id;
@@ -49,12 +50,12 @@ public class Membership {
         this.accountId = accountId;
     }
 
-    public MembershipType getType() {
-        return type;
+    public Long getPlanId() {
+        return planId;
     }
 
-    public void setType(MembershipType type) {
-        this.type = type;
+    public void setPlanId(Long planId) {
+        this.planId = planId;
     }
 
     public MembershipStatus getStatus() {
@@ -65,27 +66,27 @@ public class Membership {
         this.status = status;
     }
 
-    public OffsetDateTime getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public OffsetDateTime getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(OffsetDateTime startDate) {
+    public void setStartDate(ZonedDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public OffsetDateTime getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(OffsetDateTime endDate) {
+    public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
     }
 }

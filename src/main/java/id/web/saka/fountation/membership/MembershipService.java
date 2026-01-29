@@ -1,4 +1,4 @@
-package id.web.saka.fountation.account.membership;
+package id.web.saka.fountation.membership;
 
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 public class MembershipService {
     
     private final MembershipRepository membershipRepository;
+
     
     public MembershipService(MembershipRepository membershipRepository) {
         this.membershipRepository = membershipRepository;

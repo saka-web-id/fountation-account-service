@@ -1,5 +1,6 @@
 package id.web.saka.fountation.account.activity;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -10,6 +11,7 @@ public class Activity {
 
     public enum ActivityAction { LOGIN, LOGOUT, VIEW_PAGE, UPDATE_PROFILE, CHANGE_PASSWORD }
 
+    @Id
     @Column("id")
     private long id;
 

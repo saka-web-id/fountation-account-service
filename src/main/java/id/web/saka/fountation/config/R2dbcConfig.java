@@ -2,6 +2,8 @@ package id.web.saka.fountation.config;
 
 import id.web.saka.fountation.util.converter.account.AccountStatusReadConverter;
 import id.web.saka.fountation.util.converter.account.AccountStatusWriteConverter;
+import id.web.saka.fountation.util.converter.account.AccountTypeReadConverter;
+import id.web.saka.fountation.util.converter.account.AccountTypeWriteConverter;
 import id.web.saka.fountation.util.converter.account.activity.ActivityActionReadConverter;
 import id.web.saka.fountation.util.converter.account.activity.ActivityActionWriteConverter;
 import id.web.saka.fountation.util.converter.account.membership.MembershipStatusReadConverter;
@@ -24,6 +26,8 @@ public class R2dbcConfig {
                 Arrays.asList(
                         new AccountStatusReadConverter(),
                         new AccountStatusWriteConverter(),
+                        new AccountTypeReadConverter(),
+                        new AccountTypeWriteConverter(),
                         new MembershipStatusReadConverter(),
                         new MembershipStatusWriteConverter(),
                         new ActivityActionReadConverter(),
