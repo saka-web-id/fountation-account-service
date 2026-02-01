@@ -1,11 +1,15 @@
 package id.web.saka.fountation.membership.plan;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 public class MembershipPlanService {
+
+    Logger log = LoggerFactory.getLogger(MembershipPlanService.class);
 
     private final MembershipPlanRepository membershipPlanRepository;
 
@@ -22,7 +26,10 @@ public class MembershipPlanService {
 
     public Mono<? extends MembershipPlanDTO> saveMembershipPlan(Long companyId, Long userId, MembershipPlanDTO membershipPlan) {
 
+        log.info("Saving MembershipPlan for companyId: " + companyId + ", userId: " + userId + ", membershipPlan: " + membershipPlan.features().textValue());
+
         return membershipPlanRepository.save(membershipPlanMapper.toEntity(membershipPlan))
+                .doOnNext(savedMembershipPlan -> log.info("Saved MembershipPlan: {}", savedMembershipPlan.getFeatures().textValue()))
                 .map(membershipPlanMapper::toDto);
     }
 

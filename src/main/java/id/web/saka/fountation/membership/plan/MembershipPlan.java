@@ -1,10 +1,12 @@
 package id.web.saka.fountation.membership.plan;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 @Table(value = "membership_plan", schema = "account")
 public class MembershipPlan {
@@ -22,9 +24,11 @@ public class MembershipPlan {
     @Column("billing_cycle")
     private String billingCycle;
     @Column("features")
-    private String features;
+    private JsonNode features;
+
+    @CreatedDate
     @Column("created_at")
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
 
     public Long getId() {
         return id;
@@ -66,19 +70,19 @@ public class MembershipPlan {
         this.billingCycle = billingCycle;
     }
 
-    public String getFeatures() {
+    public JsonNode getFeatures() {
         return features;
     }
 
-    public void setFeatures(String features) {
+    public void setFeatures(JsonNode features) {
         this.features = features;
     }
 
-    public ZonedDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(ZonedDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 

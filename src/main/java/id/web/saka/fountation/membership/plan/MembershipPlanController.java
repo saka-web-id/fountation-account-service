@@ -24,6 +24,13 @@ public class MembershipPlanController {
         return membershipPlanService.getMembershipPlanListByCompanyId(companyId, userId, valueCompanyId);
     }
 
+    @GetMapping(value = "/account/membership/plan/detail/companyId/{companyId}/userId/{userId}/valueMembershipPlanId/{valueMembershipPlanId}")
+    public Mono<MembershipPlanDTO> getMembershipPlanDetailById(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueMembershipPlanId) {
+        log.info("Fetching getMembershipPlanDetailById userId: " + userId + " in companyId: " + companyId + " for valueMembershipPlanId: " + valueMembershipPlanId);
+
+        return membershipPlanService.getMembershipPlanByMembershipPlanId(valueMembershipPlanId);
+    }
+
     @PostMapping("/account/membership/plan/add/companyId/{companyId}/userId/{userId}")
     public Mono<MembershipPlanDTO> postAddMembershipPlan(@RequestBody Mono<MembershipPlanDTO> payload, @PathVariable Long companyId, @PathVariable Long userId) {
         return payload.flatMap(membershipPlan -> {

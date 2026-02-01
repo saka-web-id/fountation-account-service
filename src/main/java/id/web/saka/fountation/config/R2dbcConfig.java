@@ -1,5 +1,7 @@
 package id.web.saka.fountation.config;
 
+import id.web.saka.fountation.util.converter.JsonNodeReadConverter;
+import id.web.saka.fountation.util.converter.JsonNodeWriteConverter;
 import id.web.saka.fountation.util.converter.account.AccountStatusReadConverter;
 import id.web.saka.fountation.util.converter.account.AccountStatusWriteConverter;
 import id.web.saka.fountation.util.converter.account.AccountTypeReadConverter;
@@ -31,7 +33,9 @@ public class R2dbcConfig {
                         new MembershipStatusReadConverter(),
                         new MembershipStatusWriteConverter(),
                         new ActivityActionReadConverter(),
-                        new ActivityActionWriteConverter()
+                        new ActivityActionWriteConverter(),
+                        new JsonNodeReadConverter(),
+                        new JsonNodeWriteConverter()
                 )
         );
     }

@@ -20,7 +20,7 @@ public class AccountMembershipPlanController {
     }
 
 
-    @GetMapping(value = "/account/membership/plan/detail/companyId/{companyId}/userId/{userId}/valueUserId/{valueUserId}")
+    @GetMapping(value = "/account/user/membership/plan/detail/companyId/{companyId}/userId/{userId}/valueUserId/{valueUserId}")
     public Mono<AccountMembershipPlanDTO> getAccountMembershipPlanDetailByUserId(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueUserId) {
         log.info("Fetching AccountMembershipPlanDTO for valueUserId: " + valueUserId + " in companyId: " + companyId);
 

@@ -1,9 +1,12 @@
 package id.web.saka.fountation.util.mapper;
 
+import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+@Component
 public class DateTimeMapper {
 
     private static final ZoneId DEFAULT_ZONE = ZoneId.of("Asia/Jakarta"); // GMT+7
