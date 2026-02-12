@@ -15,6 +15,7 @@ public class Config {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(auth -> auth.pathMatchers("/api/v0/account/health").permitAll())
+                .authorizeExchange(auth -> auth.pathMatchers("/api/v0/account/user/registration").permitAll())
                 .authorizeExchange(auth -> auth.pathMatchers("/api/v0/account/membership/detail/**").hasAuthority("SCOPE_internal:service"))
                 .authorizeExchange(auth -> auth.anyExchange().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));

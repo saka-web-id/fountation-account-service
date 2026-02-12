@@ -11,6 +11,8 @@ import java.time.Instant;
 @Table(value = "membership_plan", schema = "account")
 public class MembershipPlan {
 
+    public enum MembershipPlanName { FREE, BASIC, PREMIUM, ENTERPRISE }
+
     @Id
     @Column("id")
     private Long id;
@@ -18,7 +20,7 @@ public class MembershipPlan {
     @Column("company_id")
     private Long companyId;
     @Column("name")
-    private String name;
+    private MembershipPlanName name;
     @Column("price")
     private Double price;
     @Column("billing_cycle")
@@ -46,11 +48,11 @@ public class MembershipPlan {
         this.companyId = companyId;
     }
 
-    public String getName() {
+    public MembershipPlanName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(MembershipPlanName name) {
         this.name = name;
     }
 

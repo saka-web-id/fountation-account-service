@@ -24,7 +24,7 @@ public class AccountMembershipPlanController {
     public Mono<AccountMembershipPlanDTO> getAccountMembershipPlanDetailByUserId(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueUserId) {
         log.info("Fetching AccountMembershipPlanDTO for valueUserId: " + valueUserId + " in companyId: " + companyId);
 
-        return accountMembershipPlanService.getAccountMembershipPlanDetailByUserId(companyId, userId, valueUserId);
+        return accountMembershipPlanService. getAccountMembershipPlanDetailByUserId(companyId, userId, valueUserId);
     }
 
 

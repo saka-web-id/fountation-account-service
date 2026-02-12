@@ -25,7 +25,9 @@ public class AuthorizationFilter implements WebFilter {
 
     // Define excluded paths (prefixes or exact matches)
     private static final List<String> EXCLUDED_PATHS = List.of(
-            "/api/v0/account/membership/detail/"
+            "/api/v0/user/registration",
+            "/api/v0/account/user/registration",
+            "/api/v0/authorization/user/registration"
     );
 
 
@@ -39,10 +41,10 @@ public class AuthorizationFilter implements WebFilter {
         logger.info("filter|START|path={}", path);
 
         //NOTE So far we don't exclude any path
-        /*if (EXCLUDED_PATHS.stream().anyMatch(path::startsWith)) {
+        if (EXCLUDED_PATHS.stream().anyMatch(path::startsWith)) {
             logger.info("filter|SKIP authorization for path={}", path);
             return chain.filter(exchange);
-        }*/
+        }
 
         // Use regex to extract IDs instead of manual loop
         Long companyId;

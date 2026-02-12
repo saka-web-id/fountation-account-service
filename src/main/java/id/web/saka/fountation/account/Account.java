@@ -1,25 +1,25 @@
 package id.web.saka.fountation.account;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
-@Table(value = "account", schema = "account")
+@Table(name = "account", schema = "account")
 public class Account{
 
     public enum AccountStatus{ ACTIVE, INACTIVE, DISABLE };
 
-    public enum AccountType{ SAVINGS, CHECKING, BUSINESS, JOINT };
+    public enum AccountType{ FREE, PREMIUM, ENTERPRISE };
 
     @Id
     @Column("id")
     private Long id;
-
-    @Column("user_id")
-    private Long userId;
 
     @Column("account_number")
     private String number;
@@ -30,8 +30,13 @@ public class Account{
     @Column("status")
     private AccountStatus status;
 
+    @CreatedDate
     @Column("created_at")
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column("updated_at")
+    private Instant updatedAt;
 
     public Long getId() {
         return id;
@@ -39,14 +44,6 @@ public class Account{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getNumber() {
@@ -73,23 +70,31 @@ public class Account{
         this.status = status;
     }
 
-    public ZonedDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(ZonedDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
-                ", userId=" + userId +
                 ", number='" + number + '\'' +
-                ", type='" + type + '\'' +
+                ", type=" + type +
                 ", status=" + status +
                 ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

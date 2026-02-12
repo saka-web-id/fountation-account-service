@@ -1,14 +1,24 @@
 package id.web.saka.fountation.membership;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 @Table(value = "membership", schema = "account")
 public class Membership {
+
+    public Membership() {
+    }
+
+    public Membership(Long accountId, Long planId, MembershipStatus status) {
+        this.accountId =  accountId;
+        this.planId = planId;
+        this.status = status;
+    }
 
     public enum MembershipStatus{ ACTIVE, INACTIVE, PENDING };
 
@@ -25,14 +35,15 @@ public class Membership {
     @Column("status")
     private MembershipStatus status;
 
+    @CreatedDate
     @Column("created_at")
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
 
     @Column("start_date")
-    private ZonedDateTime startDate;
+    private Instant startDate;
 
     @Column("end_date")
-    private ZonedDateTime endDate;
+    private Instant endDate;
 
     public Long getId() {
         return id;
@@ -66,27 +77,27 @@ public class Membership {
         this.status = status;
     }
 
-    public ZonedDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(ZonedDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public ZonedDateTime getStartDate() {
+    public Instant getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(ZonedDateTime startDate) {
+    public void setStartDate(Instant startDate) {
         this.startDate = startDate;
     }
 
-    public ZonedDateTime getEndDate() {
+    public Instant getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(ZonedDateTime endDate) {
+    public void setEndDate(Instant endDate) {
         this.endDate = endDate;
     }
 }

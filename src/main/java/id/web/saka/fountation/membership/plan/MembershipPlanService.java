@@ -1,5 +1,7 @@
 package id.web.saka.fountation.membership.plan;
 
+import id.web.saka.fountation.membership.Membership;
+import id.web.saka.fountation.organization.company.CompanyDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -36,5 +38,17 @@ public class MembershipPlanService {
     public Mono<MembershipPlanDTO> getMembershipPlanByMembershipPlanId(Long planId) {
         return membershipPlanRepository.findById(planId)
                 .map(membershipPlanMapper::toDto);
+    }
+
+    public Mono<MembershipPlan> createDefaultMembershipPlanForNewCompany(CompanyDTO company) {
+
+        MembershipPlan defaultPlan = new MembershipPlan();
+        defaultPlan.setCompanyId(company.id());
+        defaultPlan.setName(MembershipPlan.MembershipPlanName.FREE);
+        defaultPlan.setBillingCycle("YEARLY");
+        defaultPlan.setFeatures(null);
+        defaultPlan.setPrice(0.0);
+
+        return membershipPlanRepository.save(defaultPlan);
     }
 }

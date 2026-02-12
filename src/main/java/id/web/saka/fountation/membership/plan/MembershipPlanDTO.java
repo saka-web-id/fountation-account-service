@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 
 public record MembershipPlanDTO (
     @JsonProperty("membershipPlanId") Long id,
-    @JsonProperty("membershipPlanName") String name,
+    @JsonProperty("membershipPlanName") MembershipPlan.MembershipPlanName name,
     @JsonProperty("membershipPlanPrice") Double price,
     @JsonProperty("membershipPlanBillingCycle") String billingCycle,
     @JsonProperty("membershipPlanFeatures") JsonNode features,

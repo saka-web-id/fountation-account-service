@@ -1,5 +1,6 @@
 package id.web.saka.fountation.account;
 
+import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -12,8 +13,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Mono<Account> getAccountByUserId(Long userId) {
-        return this.accountRepository.findByUserId(userId);
+    public Mono<Account> getAccountById(Long accountId) {
+        return accountRepository.findById(accountId);
     }
 
+    public Mono<Account> createAccount(Account account) {
+        return accountRepository.save(account);
+    }
 }

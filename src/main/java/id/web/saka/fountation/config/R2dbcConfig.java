@@ -13,12 +13,14 @@ import id.web.saka.fountation.util.converter.account.membership.MembershipStatus
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 
 import java.util.Arrays;
 
 
 @Configuration
+@EnableR2dbcAuditing
 public class R2dbcConfig {
 
     @Bean

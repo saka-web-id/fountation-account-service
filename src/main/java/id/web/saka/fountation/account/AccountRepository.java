@@ -6,8 +6,4 @@ import reactor.core.publisher.Mono;
 
 public interface AccountRepository extends ReactiveCrudRepository<Account, Long> {
 
-    Mono<Account> findFirstByUserId(Long userId);
-
-    Mono<Account> findByUserId(Long userId);
-
 }
