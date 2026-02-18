@@ -20,12 +20,26 @@ spring:
         url: r2dbc:postgresql://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1232/XXXXXXXXXXXXXXXXXXXXXXXXXXXX
         username: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
         password: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    data:
+        redis:
+            host: XX.XX.XX.XX
+            port: XXXX
+            database: XX
+            password: XXXXX
 eureka:
     client:
         serviceUrl:
             defaultZone: ${EUREKA_URI:http://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1233/eureka}
     instance:
         preferIpAddress: false
+fountation:
+    service:
+        authorization:
+            url: lb://fountation-authorization-service
+        redis:
+            store:
+                duration:
+                    minutes: 10
 logging:
     level:
         org:
