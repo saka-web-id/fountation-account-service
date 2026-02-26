@@ -1,5 +1,6 @@
 server:
-    port: 0
+    #port: 0
+    port: 8080  #--> Docker
     error:
         include-binding-errors: always
         include-message: always
@@ -31,7 +32,11 @@ eureka:
         serviceUrl:
             defaultZone: ${EUREKA_URI:http://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1233/eureka}
     instance:
-        preferIpAddress: false
+        refer-ip-address: false                 # Local setup forces Eureka to use IP instead of hostname
+        ip-address: XXXXXXXXXX                # Local setup forces Eureka to use IP instead of hostname
+        hostname: fountation-account-service    # use the Swarm DNS alias
+        non-secure-port: XXXXXXXX                   # internal container port
+        #hostname: XXXXXXXXXXXXXXX
 fountation:
     service:
         authorization:
