@@ -23,7 +23,7 @@ public record UserDTO(
 
         @JsonProperty("userCreatedAt") ZonedDateTime createdAt,
 
-        @JsonProperty("userUpdatedAt") ZonedDateTime updateAt,
+        @JsonProperty("userUpdatedAt") ZonedDateTime updatedAt,
 
         @JsonProperty("userLeaderId") Long leaderId,
 
