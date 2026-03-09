@@ -1,10 +1,16 @@
 package id.web.saka.fountation.config;
 
 import id.web.saka.fountation.util.Env;
+import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
+
+import java.time.Duration;
 import java.util.Map;
 
 @Configuration
@@ -17,10 +23,28 @@ public class WebClientConfig {
     }
 
     @Bean
-    public Mono<WebClient> webClientAuthorization() {
-        return getAccessToken()
+    public HttpClient httpClient() {
+        ConnectionProvider provider = ConnectionProvider.builder("custom-account")
+                .maxIdleTime(Duration.ofSeconds(20)) // Clear connections that have been idle for 20s
+                .maxLifeTime(Duration.ofMinutes(1))  // Max life of a connection
+                .evictInBackground(Duration.ofSeconds(30)) // Evict idle connections in background
+                .build();
+
+        return HttpClient.create(provider)
+                .responseTimeout(Duration.ofSeconds(10)); // Request timeout
+    }
+
+    @Bean
+    public WebClientCustomizer webClientCustomizer(HttpClient httpClient) {
+        return webClientBuilder -> webClientBuilder.clientConnector(new ReactorClientHttpConnector(httpClient));
+    }
+
+    @Bean
+    public Mono<WebClient> webClientAuthorization(HttpClient httpClient) {
+        return getAccessToken(httpClient)
                 .map(token ->
                         WebClient.builder()
+                                .clientConnector(new ReactorClientHttpConnector(httpClient))
                                 .baseUrl(env.getFountationServiceAuthorizationUrl())
                                 .defaultHeaders(headers -> {
                                     headers.setBearerAuth(token);
@@ -31,8 +55,10 @@ public class WebClientConfig {
                 );
     }
 
-    private Mono<String> getAccessToken() {
-        WebClient webClient = WebClient.builder().build();
+    private Mono<String> getAccessToken(HttpClient httpClient) {
+        WebClient webClient = WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
 
         return webClient.post()
                 .uri(env.getClientRegistrationInternalServiceTokenUri())
