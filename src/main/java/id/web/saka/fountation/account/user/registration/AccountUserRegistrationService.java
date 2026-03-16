@@ -44,6 +44,7 @@ public class AccountUserRegistrationService {
                 ? accountMapper.toEntity(accountUserRegistrationDTO.account())
                 : new Account();
 
+        account.setId(null);
         account.setNumber("123456789101112"); // TODO: make standard Account Number
         account.setStatus(Account.AccountStatus.INACTIVE);
         account.setType(Account.AccountType.FREE);

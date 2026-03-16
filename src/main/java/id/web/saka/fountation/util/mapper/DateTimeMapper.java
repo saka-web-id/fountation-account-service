@@ -5,6 +5,7 @@ import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -14,11 +15,13 @@ public class DateTimeMapper {
     private static final ZoneId DEFAULT_ZONE = ZoneId.of("Asia/Jakarta"); // GMT+7
 
     // Instant → ZonedDateTime (GMT+7)
+    @Named("toOffset")
     public ZonedDateTime toOffset(Instant instant) {
         return instant == null ? null : instant.atZone(DEFAULT_ZONE);
     }
 
     // ZonedDateTime (GMT+7) → Instant (UTC)
+    @Named("toInstant")
     public Instant toInstant(ZonedDateTime zdt) {
         return zdt == null ? null : zdt.toInstant();
     }
@@ -57,5 +60,21 @@ public class DateTimeMapper {
                 .setSeconds(instant.getEpochSecond())
                 .setNanos(instant.getNano())
                 .build();
+    }
+
+    /**
+     * Converts LocalDateTime to ZonedDateTime by attaching the Jakarta ZoneId.
+     */
+    public ZonedDateTime toZonedDateTime(LocalDateTime ldt) {
+        if (ldt == null) return null;
+        return ldt.atZone(DEFAULT_ZONE);
+    }
+
+    /**
+     * Converts ZonedDateTime back to LocalDateTime (losing the zone information).
+     */
+    public LocalDateTime toLocalDateTime(ZonedDateTime zdt) {
+        if (zdt == null) return null;
+        return zdt.toLocalDateTime();
     }
 }

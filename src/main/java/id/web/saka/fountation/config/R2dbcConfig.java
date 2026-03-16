@@ -20,8 +20,14 @@ import java.util.Arrays;
 
 
 @Configuration
-@EnableR2dbcAuditing
+@EnableR2dbcAuditing(dateTimeProviderRef = "dateTimeProvider")
 public class R2dbcConfig {
+
+    // 2. Add this Bean to provide ZonedDateTime instead of LocalDateTime
+    @Bean(name = "dateTimeProvider")
+    public org.springframework.data.auditing.DateTimeProvider dateTimeProvider() {
+        return () -> java.util.Optional.of(java.time.ZonedDateTime.now(java.time.ZoneId.of("Asia/Jakarta")));
+    }
 
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions() {

@@ -17,6 +17,7 @@ public interface AccountMembershipPlanMapper {
     @Mapping(source = "accountMembership.membershipEndDate", target = "membershipEndDate")
     @Mapping(source = "accountMembership.membershipPlanId", target = "membershipPlanId")
     @Mapping(source = "membershipPlan", target = "membershipPlan")
+    @Mapping(source = "membershipPlan.createdAt", target = "membershipPlan.createdAt", qualifiedByName = "toInstant")
     AccountMembershipPlanDTO toDto(AccountMembershipDTO accountMembership, MembershipPlanDTO membershipPlan);
 
 }

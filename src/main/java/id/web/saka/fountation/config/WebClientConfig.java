@@ -1,6 +1,7 @@
 package id.web.saka.fountation.config;
 
 import id.web.saka.fountation.util.Env;
+import io.netty.channel.ChannelOption;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +28,14 @@ public class WebClientConfig {
     @Bean
     public HttpClient httpClient() {
         ConnectionProvider provider = ConnectionProvider.builder("fountation-account-pool")
-                .maxIdleTime(Duration.ofSeconds(20))
-                .maxLifeTime(Duration.ofMinutes(1))
+                .maxIdleTime(Duration.ofSeconds(60)) // Increased from 20s
+                .maxLifeTime(Duration.ofMinutes(5))  // Increased from 1m to match Gateway
                 .evictInBackground(Duration.ofSeconds(30))
                 .build();
 
         return HttpClient.create(provider)
-                .responseTimeout(Duration.ofSeconds(10));
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000) // 30s connection timeout
+                .responseTimeout(Duration.ofMinutes(2)); // Increased from 10s to 120s
     }
 
     @Bean
