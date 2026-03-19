@@ -67,7 +67,8 @@ public interface AccountGrpcMapper {
     @ValueMapping(source = "ACTIVE", target = "AS_ACTIVE")
     @ValueMapping(source = "INACTIVE", target = "AS_INACTIVE")
     @ValueMapping(source = "DISABLE", target = "AS_DISABLE")
-    @ValueMapping(source = MappingConstants.ANY_REMAINING, target = "AS_INACTIVE")
+    @ValueMapping(source = MappingConstants.ANY_UNMAPPED, target = "AS_INACTIVE")
+    @ValueMapping(source = MappingConstants.NULL, target = "AS_INACTIVE")
     AccountStatus toAccountStatusProto(Account.AccountStatus status);
 
     @ValueMapping(source = "AS_ACTIVE", target = "ACTIVE")
@@ -81,7 +82,8 @@ public interface AccountGrpcMapper {
     @ValueMapping(source = "FREE", target = "AT_FREE")
     @ValueMapping(source = "PREMIUM", target = "AT_PREMIUM")
     @ValueMapping(source = "ENTERPRISE", target = "AT_ENTERPRISE")
-    @ValueMapping(source = MappingConstants.ANY_REMAINING, target = "AT_FREE")
+    @ValueMapping(source = MappingConstants.ANY_UNMAPPED, target = "AT_FREE")
+    @ValueMapping(source = MappingConstants.NULL, target = "AT_FREE")
     AccountType toAccountTypeProto(Account.AccountType type);
 
     @ValueMapping(source = "AT_FREE", target = "FREE")
@@ -95,7 +97,8 @@ public interface AccountGrpcMapper {
     @ValueMapping(source = "ACTIVE", target = "MS_ACTIVE")
     @ValueMapping(source = "INACTIVE", target = "MS_INACTIVE")
     @ValueMapping(source = "PENDING", target = "MS_PENDING")
-    @ValueMapping(source = MappingConstants.ANY_REMAINING, target = "MS_INACTIVE")
+    @ValueMapping(source = MappingConstants.ANY_UNMAPPED, target = "MS_INACTIVE")
+    @ValueMapping(source = MappingConstants.NULL, target = "MS_INACTIVE")
     MembershipStatus toMembershipStatusProto(Membership.MembershipStatus status);
 
     @ValueMapping(source = "MS_ACTIVE", target = "ACTIVE")

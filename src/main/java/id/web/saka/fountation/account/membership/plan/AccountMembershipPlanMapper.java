@@ -16,7 +16,11 @@ public interface AccountMembershipPlanMapper {
     @Mapping(source = "accountMembership.membershipStartDate", target = "membershipStartDate")
     @Mapping(source = "accountMembership.membershipEndDate", target = "membershipEndDate")
     @Mapping(source = "accountMembership.membershipPlanId", target = "membershipPlanId")
-    @Mapping(source = "membershipPlan", target = "membershipPlan")
+    @Mapping(source = "membershipPlan.id", target = "membershipPlan.id")
+    @Mapping(source = "membershipPlan.name", target = "membershipPlan.name")
+    @Mapping(source = "membershipPlan.price", target = "membershipPlan.price")
+    @Mapping(source = "membershipPlan.billingCycle", target = "membershipPlan.billingCycle")
+    @Mapping(source = "membershipPlan.features", target = "membershipPlan.features")
     @Mapping(source = "membershipPlan.createdAt", target = "membershipPlan.createdAt", qualifiedByName = "toInstant")
     AccountMembershipPlanDTO toDto(AccountMembershipDTO accountMembership, MembershipPlanDTO membershipPlan);
 

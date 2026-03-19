@@ -71,6 +71,7 @@ public class AccountMembershipPlanService {
                                         membershipPlanService
                                                 .getMembershipPlanByMembershipPlanId(accountMembershipDTO.membershipPlanId())
                                                 .flatMap(membershipPlanDTO -> {
+                                                    log.info("MembershipPlanDTO: {} ", membershipPlanDTO.toString());
                                                     AccountMembershipPlanDTO dto =
                                                             accountMembershipPlanMapper.toDto(
                                                                     accountMembershipDTO,
