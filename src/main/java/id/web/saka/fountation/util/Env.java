@@ -1,3 +1,4 @@
+/*
 package id.web.saka.fountation.util;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -105,3 +106,4 @@ public class Env {
         this.clientRegistrationInternalServiceTokenUri = clientRegistrationInternalServiceTokenUri;
     }
 }
+*/

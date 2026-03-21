@@ -1,53 +1,11 @@
-server:
-    #port: 0
-    port: 8080  #--> Docker
-    error:
-        include-binding-errors: always
-        include-message: always
 spring:
     application:
         name: fountation-account-service
-    main:
-        web-application-type: reactive
-    security:
-        oauth2:
-            resourceserver:
-                jwt:
-                    audiences:
-                        - https://XXXXXXXXXXXXXXXXXXXXXXXXXXXX.us.auth0.com/api/v2/
-                    issuer-uri: https://XXXXXXXXXXXXXXXXXXXXXXXXXXXX.us.auth0.com/
-                    jwk-set-uri: https://XXXXXXXXXXXXXXXXXXXXXXXXXXXX.us.auth0.com/.well-known/jwks.json
     r2dbc:
-        url: r2dbc:postgresql://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1232/XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        username: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        password: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    data:
-        redis:
-            host: XX.XX.XX.XX
-            port: XXXX
-            database: XX
-            password: XXXXX
-eureka:
-    client:
-        serviceUrl:
-            defaultZone: ${EUREKA_URI:http://XXXXXXXXXXXXXXXXXXXXXXXXXXXX:1233/eureka}
-    instance:
-        refer-ip-address: false                 # Local setup forces Eureka to use IP instead of hostname
-        ip-address: XXXXXXXXXX                # Local setup forces Eureka to use IP instead of hostname
-        hostname: fountation-account-service    # use the Swarm DNS alias
-        non-secure-port: XXXXXXXX                   # internal container port
-        #hostname: XXXXXXXXXXXXXXX
-fountation:
-    service:
-        authorization:
-            url: lb://fountation-authorization-service
-        redis:
-            store:
-                duration:
-                    minutes: 10
-logging:
-    level:
-        org:
-            springframework:
-                security:
-                    oauth2: TRACE
+        url: r2dbc:postgresql://XXXXXXXXXX:XXXXXXXXXXXXX/XXXXXXXXXXXXXX
+        username: XXXXXXXXX
+        password: XXXXXXXXXXXXX
+        pool:
+            initial-size: 10
+            max-size: 20
+            max-create-connection-time: 5s # Waktu tunggu buat koneksi baru

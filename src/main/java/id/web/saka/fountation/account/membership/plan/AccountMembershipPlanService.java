@@ -4,9 +4,9 @@ import id.web.saka.fountation.account.AccountService;
 import id.web.saka.fountation.account.membership.AccountMembershipDTO;
 import id.web.saka.fountation.account.membership.AccountMembershipMapper;
 import id.web.saka.fountation.account.user.AccountUserService;
+import id.web.saka.fountation.configbase.fountation.FountationProperties;
 import id.web.saka.fountation.membership.MembershipService;
 import id.web.saka.fountation.membership.plan.MembershipPlanService;
-import id.web.saka.fountation.util.Env;
 import org.slf4j.Logger;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class AccountMembershipPlanService {
 
     private final ReactiveRedisTemplate<String, AccountMembershipPlanDTO> redisTemplateAccountMembershipPlanDTO;
 
-    private final Env env;
+    private final FountationProperties fountationProperties;
 
     public AccountMembershipPlanService(
             AccountService accountService,
@@ -43,7 +43,7 @@ public class AccountMembershipPlanService {
             MembershipService membershipService,
             MembershipPlanService membershipPlanService,
             ReactiveRedisTemplate<String, AccountMembershipPlanDTO> redisTemplateAccountMembershipPlanDTO,
-            Env env) {
+            FountationProperties fountationProperties) {
         this.accountService = accountService;
         this.accountUserService = accountUserService;
         this.accountMembershipMapper = accountMembershipMapper;
@@ -51,7 +51,7 @@ public class AccountMembershipPlanService {
         this.membershipService = membershipService;
         this.membershipPlanService = membershipPlanService;
         this.redisTemplateAccountMembershipPlanDTO = redisTemplateAccountMembershipPlanDTO;
-        this.env = env;
+        this.fountationProperties = fountationProperties;
     }
 
     public Mono<AccountMembershipPlanDTO> getAccountMembershipPlanDetailByUserId(
@@ -102,7 +102,7 @@ public class AccountMembershipPlanService {
         log.info("Redis cache user {} with dto {} ", key, dto.toString() );
 
         return redisTemplateAccountMembershipPlanDTO.opsForValue()
-                .set(key, dto, Duration.ofMinutes(env.getFountationServiceRedisStoreDurationInMinutes()))
+                .set(key, dto, Duration.ofMinutes(fountationProperties.getService().getRedis().getStore().getDuration().getMinutes()))
                 .onErrorResume(err -> {
                     log.warn("Failed to cache in Redis: {}", err.getMessage());
                     return Mono.empty();
