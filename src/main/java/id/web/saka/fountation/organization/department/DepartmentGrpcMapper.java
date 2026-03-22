@@ -3,8 +3,9 @@ package id.web.saka.fountation.organization.department;
 import id.web.saka.fountation.util.mapper.DateTimeMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = { DateTimeMapper.class })
+@Mapper(componentModel = "spring", uses = { DateTimeMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DepartmentGrpcMapper {
 
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "toProtoTimestamp")

@@ -20,4 +20,8 @@ public class MembershipService {
     public Mono<Membership> createMembershipForAccountWithPlan(Long accountId, Long planId, Membership.MembershipStatus membershipStatus) {
         return membershipRepository.save(new Membership(accountId, planId, membershipStatus));
     }
+
+    public Mono<Membership> saveMembership(Membership membership) {
+        return membershipRepository.save(membership);
+    }
 }

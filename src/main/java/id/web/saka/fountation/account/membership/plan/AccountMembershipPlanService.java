@@ -83,6 +83,38 @@ public class AccountMembershipPlanService {
                 );
     }
 
+    public reactor.core.publisher.Flux<id.web.saka.fountation.membership.plan.MembershipPlanDTO> getMembershipPlanListByCompanyId(Long companyId, Long userId, Long valueCompanyId) {
+        log.info("Fetching membership plan list for companyId: {}", valueCompanyId);
+        return membershipPlanService.getMembershipPlanListByCompanyId(companyId, userId, valueCompanyId);
+    }
+
+    public Mono<AccountMembershipPlanDTO> updateAccountMembershipPlan(Long companyId, Long userId, Long valueUserId, id.web.saka.fountation.account.Account.AccountStatus accountStatus, id.web.saka.fountation.membership.Membership.MembershipStatus membershipStatus, Long membershipPlanId) {
+        log.info("Updating Account and Membership for valueUserId: {}", valueUserId);
+
+        return accountUserService.getAccountByUserId(valueUserId)
+                .flatMap(accountUser ->
+                        accountService.getAccountById(accountUser.getAccountId())
+                                .flatMap(account -> {
+                                    account.setStatus(accountStatus);
+                                    return accountService.createAccount(account);
+                                })
+                                .flatMap(updatedAccount ->
+                                        membershipService.findMembershipByAccountId(updatedAccount.getId())
+                                                .flatMap(membership -> {
+                                                    membership.setStatus(membershipStatus);
+                                                    membership.setPlanId(membershipPlanId);
+                                                    return membershipService.saveMembership(membership);
+                                                })
+                                )
+                )
+                .flatMap(savedMembership -> {
+                    // Evict cache
+                    String key = "accountMembershipPlanDTO:userId:" + valueUserId;
+                    return redisTemplateAccountMembershipPlanDTO.opsForValue().delete(key)
+                            .then(getAccountMembershipPlanDetailByUserId(companyId, userId, valueUserId));
+                });
+    }
+
     private Mono<AccountMembershipDTO> getAccountMembershipDetailByUserId(Long userId) {
         log.info("Fetching AccountMembershipDTO for userId: {}", userId);
         String key = "accountMembershipDTO:userId:" + userId;

@@ -15,55 +15,15 @@ public class AccountGrpcService extends AccountServiceGrpc.AccountServiceImplBas
     private final AccountMembershipPlanService accountMembershipPlanService;
     private final AccountUserRegistrationService accountUserRegistrationService;
     private final AccountGrpcMapper mapper;
+    private final id.web.saka.fountation.membership.plan.MembershipPlanGrpcMapper membershipPlanGrpcMapper;
 
     public AccountGrpcService(AccountMembershipPlanService accountMembershipPlanService, 
                               AccountUserRegistrationService accountUserRegistrationService,
-                              AccountGrpcMapper mapper) {
+                              AccountGrpcMapper mapper,
+                              id.web.saka.fountation.membership.plan.MembershipPlanGrpcMapper membershipPlanGrpcMapper) {
         this.accountMembershipPlanService = accountMembershipPlanService;
         this.accountUserRegistrationService = accountUserRegistrationService;
         this.mapper = mapper;
-    }
-
-    @Override
-    public void getAccountMembershipPlanDetailByUserId(AccountMembershipPlanRequest request, 
-                                                       StreamObserver<AccountMembershipPlanResponse> responseObserver) {
-        log.info("Received gRPC request for account membership plan detail: companyId={}, userId={}, valueUserId={}",
-                request.getCompanyId(), request.getUserId(), request.getValueUserId());
-
-        accountMembershipPlanService.getAccountMembershipPlanDetailByUserId(
-                request.getCompanyId(), request.getUserId(), request.getValueUserId())
-                .map(mapper::toProto)
-                .subscribe(
-                        response -> {
-                            responseObserver.onNext(response);
-                            responseObserver.onCompleted();
-                        },
-                        error -> {
-                            log.error("Error fetching account membership plan detail via gRPC", error);
-                            responseObserver.onError(io.grpc.Status.INTERNAL
-                                    .withDescription("Error during account membership plan retrieval: " + error.getMessage())
-                                    .asRuntimeException());
-                        }
-                );
-    }
-
-    @Override
-    public void registerUser(UserRegistrationRequest request, StreamObserver<UserRegistrationResponse> responseObserver) {
-        log.info("Received gRPC request for user registration: email={}", request.getUser().getEmail());
-
-        accountUserRegistrationService.assignAccountToNewUser(mapper.toDTO(request))
-                .map(mapper::toProto)
-                .subscribe(
-                        response -> {
-                            responseObserver.onNext(response);
-                            responseObserver.onCompleted();
-                        },
-                        error -> {
-                            log.error("Error during user registration via gRPC", error);
-                            responseObserver.onError(io.grpc.Status.INTERNAL
-                                    .withDescription("Error during user registration: " + error.getMessage())
-                                    .asRuntimeException());
-                        }
-                );
+        this.membershipPlanGrpcMapper = membershipPlanGrpcMapper;
     }
 }

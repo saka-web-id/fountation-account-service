@@ -20,7 +20,7 @@ public class Membership {
         this.status = status;
     }
 
-    public enum MembershipStatus{ ACTIVE, INACTIVE, PENDING };
+    public enum MembershipStatus{ ACTIVE, INACTIVE, PENDING, DISABLED };
 
     @Id
     @Column("id")

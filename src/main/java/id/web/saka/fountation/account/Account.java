@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 @Table(name = "account", schema = "account")
 public class Account{
 
-    public enum AccountStatus{ ACTIVE, INACTIVE, DISABLE };
+    public enum AccountStatus{ ACTIVE, INACTIVE, DISABLED };
 
     public enum AccountType{ FREE, PREMIUM, ENTERPRISE };
 

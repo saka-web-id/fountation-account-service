@@ -2,8 +2,8 @@ package id.web.saka.fountation.util.mapper;
 
 import id.web.saka.fountation.account.AccountStatus;
 import id.web.saka.fountation.account.AccountType;
-import id.web.saka.fountation.account.MembershipStatus;
-import id.web.saka.fountation.account.MembershipPlanName;
+import id.web.saka.fountation.membership.MembershipStatus;
+import id.web.saka.fountation.membership.plan.MembershipPlanName;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
@@ -31,5 +31,11 @@ public class EnumMapper {
     public MembershipStatus stringToMembershipStatus(String status) {
         if (status == null) return MembershipStatus.MS_ACTIVE;
         try { return MembershipStatus.valueOf("MS_" + status.toUpperCase()); } catch (Exception e) { return MembershipStatus.MS_ACTIVE; }
+    }
+
+    @Named("stringToMembershipPlan")
+    public MembershipPlanName stringToMembershipPlan(String plan) {
+        if (plan == null) return MembershipPlanName.MPN_FREE;
+        try { return MembershipPlanName.valueOf("MPN_" + plan.toUpperCase()); } catch (Exception e) { return MembershipPlanName.MPN_FREE; }
     }
 }
