@@ -61,8 +61,9 @@ public class AccountMembershipPlanService {
 
         return redisTemplateAccountMembershipPlanDTO.opsForValue()
                 .get(key)
+                .doOnNext(dto -> log.info("[getAccountMembershipPlanDetailByUserId] Cache hit for account membership plan detail with key: {}", key))
                 .onErrorResume(e -> {
-                    log.warn("Redis unavailable, fallback to DB: {}", e.getMessage());
+                    log.warn("[getAccountMembershipPlanDetailByUserId] Redis unavailable while fetching account membership plan detail, falling back to database. Error: {}", e.getMessage());
                     return Mono.empty();
                 })
                 .switchIfEmpty(
@@ -70,8 +71,8 @@ public class AccountMembershipPlanService {
                                 .flatMap(accountMembershipDTO ->
                                         membershipPlanService
                                                 .getMembershipPlanByMembershipPlanId(accountMembershipDTO.membershipPlanId())
+                                                .doOnNext(membershipPlanDTO -> log.info("[getAccountMembershipPlanDetailByUserId] Successfully retrieved membership plan detail from DB for plan ID: {}", accountMembershipDTO.membershipPlanId()))
                                                 .flatMap(membershipPlanDTO -> {
-                                                    log.info("MembershipPlanDTO: {} ", membershipPlanDTO.toString());
                                                     AccountMembershipPlanDTO dto =
                                                             accountMembershipPlanMapper.toDto(
                                                                     accountMembershipDTO,
@@ -84,12 +85,12 @@ public class AccountMembershipPlanService {
     }
 
     public reactor.core.publisher.Flux<id.web.saka.fountation.membership.plan.MembershipPlanDTO> getMembershipPlanListByCompanyId(Long companyId, Long userId, Long valueCompanyId) {
-        log.info("Fetching membership plan list for companyId: {}", valueCompanyId);
+        log.info("[getMembershipPlanListByCompanyId] Fetching membership plan list for company ID: {} requested by user ID: {}", valueCompanyId, userId);
         return membershipPlanService.getMembershipPlanListByCompanyId(companyId, userId, valueCompanyId);
     }
 
     public Mono<AccountMembershipPlanDTO> updateAccountMembershipPlan(Long companyId, Long userId, Long valueUserId, id.web.saka.fountation.account.Account.AccountStatus accountStatus, id.web.saka.fountation.membership.Membership.MembershipStatus membershipStatus, Long membershipPlanId) {
-        log.info("Updating Account and Membership for valueUserId: {}", valueUserId);
+        log.info("[updateAccountMembershipPlan] Updating account and membership status for target user ID: {} initiated by user ID: {} in company ID: {}", valueUserId, userId, companyId);
 
         return accountUserService.getAccountByUserId(valueUserId)
                 .flatMap(accountUser ->
@@ -98,6 +99,7 @@ public class AccountMembershipPlanService {
                                     account.setStatus(accountStatus);
                                     return accountService.createAccount(account);
                                 })
+                                .doOnNext(updatedAccount -> log.info("[updateAccountMembershipPlan] Successfully updated account status for account ID: {} to {}", updatedAccount.getId(), accountStatus))
                                 .flatMap(updatedAccount ->
                                         membershipService.findMembershipByAccountId(updatedAccount.getId())
                                                 .flatMap(membership -> {
@@ -105,25 +107,27 @@ public class AccountMembershipPlanService {
                                                     membership.setPlanId(membershipPlanId);
                                                     return membershipService.saveMembership(membership);
                                                 })
+                                                .doOnNext(savedMembership -> log.info("[updateAccountMembershipPlan] Successfully updated membership status for account ID: {} to plan ID: {}", savedMembership.getAccountId(), membershipPlanId))
                                 )
                 )
                 .flatMap(savedMembership -> {
                     // Evict cache
                     String key = "accountMembershipPlanDTO:userId:" + valueUserId;
                     return redisTemplateAccountMembershipPlanDTO.opsForValue().delete(key)
+                            .doOnNext(deleted -> log.info("[updateAccountMembershipPlan] Evicted cache for key: {} result: {}", key, deleted))
                             .then(getAccountMembershipPlanDetailByUserId(companyId, userId, valueUserId));
                 });
     }
 
     private Mono<AccountMembershipDTO> getAccountMembershipDetailByUserId(Long userId) {
-        log.info("Fetching AccountMembershipDTO for userId: {}", userId);
+        log.info("[getAccountMembershipDetailByUserId] Fetching detailed account membership for user ID: {}", userId);
         String key = "accountMembershipDTO:userId:" + userId;
 
         return accountUserService.getAccountByUserId(userId)
                 .flatMap(accountUser -> accountService.getAccountById(accountUser.getAccountId())
                         .flatMap(account -> membershipService.findMembershipByAccountId(accountUser.getAccountId())
                                 .map(membership -> {
-                                    log.info("Mapping Account {} and Membership {} to AccountMembershipDTO", account, membership);
+                                    log.info("[getAccountMembershipDetailByUserId] Mapping account ID: {} and membership ID: {} to AccountMembershipDTO", account.getId(), membership.getId());
                                     return accountMembershipMapper.toDto(account, membership);
                                 })
                         )
@@ -131,12 +135,13 @@ public class AccountMembershipPlanService {
     }
 
     private Mono<AccountMembershipPlanDTO> cacheAccountMembershipDTO(String key, AccountMembershipPlanDTO dto) {
-        log.info("Redis cache user {} with dto {} ", key, dto.toString() );
+        log.info("[cacheAccountMembershipDTO] Caching account membership plan detail in Redis for key: {}", key);
 
         return redisTemplateAccountMembershipPlanDTO.opsForValue()
                 .set(key, dto, Duration.ofMinutes(fountationProperties.getService().getRedis().getStore().getDuration().getMinutes()))
+                .doOnSuccess(v -> log.info("[cacheAccountMembershipDTO] Successfully cached data in Redis for key: {}", key))
                 .onErrorResume(err -> {
-                    log.warn("Failed to cache in Redis: {}", err.getMessage());
+                    log.warn("[cacheAccountMembershipDTO] Failed to cache data in Redis for key: {}. Error: {}", key, err.getMessage());
                     return Mono.empty();
                 })
                 .thenReturn(dto);

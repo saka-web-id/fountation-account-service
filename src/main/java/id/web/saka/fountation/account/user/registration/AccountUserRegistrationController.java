@@ -20,12 +20,11 @@ public class AccountUserRegistrationController {
 
     @PostMapping("/account/user/registration")
     public Mono<AccountUserRegistrationDTO> assignAccountToNewUser(@RequestBody Mono<AccountUserRegistrationDTO> payload) {
-        log.info("Registering UserRole for new user: {}", payload.toString());
-
-        return payload.
-                doOnNext(dto -> log.info("Incoming assignRoleToNewUser payload: {}", dto))
-                .flatMap(userRegistrationService::assignAccountToNewUser
-                ).doOnError(error -> log.error("Error assigning role to new user: " + error.getMessage()));
+        return payload
+                .doOnNext(dto -> log.info("[assignAccountToNewUser] Incoming account assignment request for new user with email: {}", dto.user().email()))
+                .flatMap(userRegistrationService::assignAccountToNewUser)
+                .doOnSuccess(dto -> log.info("[assignAccountToNewUser] Successfully assigned account to new user with email: {}", dto.user().email()))
+                .doOnError(error -> log.error("[assignAccountToNewUser] Failed to assign account to new user. Error: {}", error.getMessage()));
     }
 
 }

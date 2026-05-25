@@ -23,7 +23,7 @@ public class UserRegistrationGrpcService extends UserRegistrationServiceGrpc.Use
 
     @Override
     public void registerUser(UserRegistrationRequest request, StreamObserver<UserRegistrationResponse> responseObserver) {
-        log.info("Received gRPC request for user registration: email={}", request.getUser().getEmail());
+        log.info("[registerUser] Received gRPC request for new user registration with email: {}", request.getUser().getEmail());
 
         accountUserRegistrationService.assignAccountToNewUser(userRegistrationMapper.toDTO(request))
                 .map(userRegistrationMapper::toProto)
@@ -33,7 +33,7 @@ public class UserRegistrationGrpcService extends UserRegistrationServiceGrpc.Use
                             responseObserver.onCompleted();
                         },
                         error -> {
-                            log.error("Error during user registration via gRPC", error);
+                            log.error("[registerUser] Internal error during user registration via gRPC for email: {}. Error: {}", request.getUser().getEmail(), error.getMessage());
                             responseObserver.onError(io.grpc.Status.INTERNAL
                                     .withDescription("Error during user registration: " + error.getMessage())
                                     .asRuntimeException());

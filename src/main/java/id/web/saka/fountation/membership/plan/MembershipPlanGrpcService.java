@@ -20,7 +20,7 @@ public class MembershipPlanGrpcService extends MembershipPlanServiceGrpc.Members
 
     @Override
     public void getMembershipPlanListByCompanyId(MembershipPlanListRequest request, StreamObserver<MembershipPlanListResponse> responseObserver) {
-        log.info("Received gRPC request for membership plan list: valueCompanyId={}", request.getValueCompanyId());
+        log.info("[getMembershipPlanListByCompanyId] Received gRPC request to fetch membership plan list for company ID: {} requested by user ID: {} in company ID: {}", request.getValueCompanyId(), request.getUserId(), request.getCompanyId());
 
         accountMembershipPlanService.getMembershipPlanListByCompanyId(request.getCompanyId(), request.getUserId(), request.getValueCompanyId())
                 .map(membershipPlanGrpcMapper::toProto)
@@ -34,7 +34,7 @@ public class MembershipPlanGrpcService extends MembershipPlanServiceGrpc.Members
                             responseObserver.onCompleted();
                         },
                         error -> {
-                            log.error("Error fetching membership plan list via gRPC", error);
+                            log.error("[getMembershipPlanListByCompanyId] Internal error while fetching membership plan list via gRPC for company ID: {}. Error: {}", request.getValueCompanyId(), error.getMessage());
                             responseObserver.onError(io.grpc.Status.INTERNAL
                                     .withDescription("Error during membership plan list retrieval: " + error.getMessage())
                                     .asRuntimeException());

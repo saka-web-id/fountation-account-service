@@ -19,14 +19,14 @@ public class MembershipPlanController {
 
     @GetMapping(value = "/account/membership/plan/list/companyId/{companyId}/userId/{userId}/valueCompanyId/{valueCompanyId}")
     public Flux<MembershipPlanDTO> getMembershipPlanListByCompanyId(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueCompanyId) {
-        log.info("Fetching getMembershipList userId: " + userId + " in companyId: " + companyId + " for valueCompanyId: " + valueCompanyId);
+        log.info("[getMembershipPlanListByCompanyId] Fetching membership plan list for company ID: {} requested by user ID: {} in company ID: {}", valueCompanyId, userId, companyId);
 
         return membershipPlanService.getMembershipPlanListByCompanyId(companyId, userId, valueCompanyId);
     }
 
     @GetMapping(value = "/account/membership/plan/detail/companyId/{companyId}/userId/{userId}/valueMembershipPlanId/{valueMembershipPlanId}")
     public Mono<MembershipPlanDTO> getMembershipPlanDetailById(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueMembershipPlanId) {
-        log.info("Fetching getMembershipPlanDetailById userId: " + userId + " in companyId: " + companyId + " for valueMembershipPlanId: " + valueMembershipPlanId);
+        log.info("[getMembershipPlanDetailById] Fetching membership plan detail for plan ID: {} requested by user ID: {} in company ID: {}", valueMembershipPlanId, userId, companyId);
 
         return membershipPlanService.getMembershipPlanByMembershipPlanId(valueMembershipPlanId);
     }
@@ -34,7 +34,7 @@ public class MembershipPlanController {
     @PostMapping("/account/membership/plan/add/companyId/{companyId}/userId/{userId}")
     public Mono<MembershipPlanDTO> postAddMembershipPlan(@RequestBody Mono<MembershipPlanDTO> payload, @PathVariable Long companyId, @PathVariable Long userId) {
         return payload.flatMap(membershipPlan -> {
-            log.info("Adding MembershipPlan: {} by userId: {} in companyId: {}", membershipPlan, userId, companyId);
+            log.info("[postAddMembershipPlan] Adding new membership plan for company ID: {} initiated by user ID: {} in company ID: {}", membershipPlan.companyId(), userId, companyId);
 
             return membershipPlanService.saveMembershipPlan(companyId, userId, membershipPlan);
         });
@@ -43,7 +43,7 @@ public class MembershipPlanController {
     @PostMapping("/account/membership/plan/update/companyId/{companyId}/userId/{userId}")
     public Mono<MembershipPlanDTO> postUpdateMembershipPlan(@RequestBody Mono<MembershipPlanDTO> payload, @PathVariable Long companyId, @PathVariable Long userId) {
         return payload.flatMap(membershipPlan -> {
-            log.info("Updating MembershipPlan: {} by userId: {} in companyId: {}", membershipPlan, userId, companyId);
+            log.info("[postUpdateMembershipPlan] Updating membership plan ID: {} initiated by user ID: {} in company ID: {}", membershipPlan.id(), userId, companyId);
 
             return membershipPlanService.saveMembershipPlan(companyId, userId, membershipPlan);
         });

@@ -24,14 +24,14 @@ public class AccountMembershipPlanController {
 
     @GetMapping(value = "/account/user/membership/plan/detail/companyId/{companyId}/userId/{userId}/valueUserId/{valueUserId}")
     public Mono<AccountMembershipPlanDTO> getAccountMembershipPlanDetailByUserId(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueUserId) {
-        log.info("Fetching AccountMembershipPlanDTO for valueUserId: " + valueUserId + " in companyId: " + companyId);
+        log.info("[getAccountMembershipPlanDetailByUserId] Fetching account membership plan detail for target user ID: {} requested by user ID: {} in company ID: {}", valueUserId, userId, companyId);
 
         return accountMembershipPlanService. getAccountMembershipPlanDetailByUserId(companyId, userId, valueUserId);
     }
 
     /*@GetMapping(value = "/account/user/membership/plan/list/companyId/{companyId}/userId/{userId}/valueCompanyId/{valueCompanyId}")
     public reactor.core.publisher.Flux<id.web.saka.fountation.membership.plan.MembershipPlanDTO> getMembershipPlanListByCompanyId(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueCompanyId) {
-        log.info("Fetching MembershipPlanDTO list for companyId: " + valueCompanyId);
+        log.info("[Account-Service] Fetching membership plan list for company ID: {} requested by user ID: {}", valueCompanyId, userId);
 
         return accountMembershipPlanService.getMembershipPlanListByCompanyId(companyId, userId, valueCompanyId);
     }
@@ -42,7 +42,7 @@ public class AccountMembershipPlanController {
             @PathVariable Long userId,
             @PathVariable Long valueUserId,
             @RequestBody UpdateAccountMembershipPlanRequest request) {
-        log.info("Updating AccountMembershipPlan for valueUserId: " + valueUserId);
+        log.info("[Account-Service] Updating account membership plan for target user ID: {} requested by user ID: {} in company ID: {}", valueUserId, userId, companyId);
 
         return accountMembershipPlanService.updateAccountMembershipPlan(
                 companyId,

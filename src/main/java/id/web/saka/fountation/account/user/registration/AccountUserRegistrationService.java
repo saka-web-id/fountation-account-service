@@ -37,7 +37,7 @@ public class AccountUserRegistrationService {
 
 
     public Mono<AccountUserRegistrationDTO> assignAccountToNewUser(AccountUserRegistrationDTO accountUserRegistrationDTO) {
-        log.info("Assigning Account to new user with payload: {}", accountUserRegistrationDTO);
+        log.info("[assignAccountToNewUser] Assigning account to new user with email: {}", accountUserRegistrationDTO.user().email());
 
         // create new account with status INACTIVE and account type FREE
         Account account = accountUserRegistrationDTO.account() != null
@@ -50,16 +50,20 @@ public class AccountUserRegistrationService {
         account.setType(Account.AccountType.FREE);
 
         return accountService.createAccount(account)
+                .doOnNext(createdAccount -> log.info("[assignAccountToNewUser] Created new inactive account for user with ID: {}", createdAccount.getId()))
                 .flatMap(createdAccount ->
                         accountUserService.assignAccountToNewUser(accountUserRegistrationDTO.user(), createdAccount)
+                                .doOnNext(accountUser -> log.info("[assignAccountToNewUser] Successfully mapped user ID: {} to account ID: {}", accountUser.getUserId(), createdAccount.getId()))
                                 .flatMap(accountUser ->
                                         membershipPlanService.createDefaultMembershipPlanForNewCompany(accountUserRegistrationDTO.company())
+                                                .doOnNext(membershipPlan -> log.info("[assignAccountToNewUser] Created default membership plan for new company: {}", accountUserRegistrationDTO.company().name()))
                                                 .flatMap(membershipPlan ->
                                                         membershipService.createMembershipForAccountWithPlan(
                                                                         createdAccount.getId(),
                                                                         membershipPlan.getId(),
                                                                         Membership.MembershipStatus.INACTIVE
                                                                 )
+                                                                .doOnNext(membership -> log.info("[assignAccountToNewUser] Successfully created inactive membership for account ID: {} with plan ID: {}", createdAccount.getId(), membershipPlan.getId()))
                                                                 .thenReturn(new AccountUserRegistrationDTO(
                                                                         accountUserRegistrationDTO.user(),
                                                                         accountMapper.toDTO(createdAccount),

@@ -21,12 +21,13 @@ public class PolicyWebClientImpl implements PolicyClient {
 
     @Override
     public Mono<PolicyResponseDTO> evaluate(Long userId, Long companyId, PolicyRequestDTO authRequest) {
-        logger.info("Evaluating policy via REST: companyId={}, userId={}", companyId, userId);
+        logger.info("[evaluate] Evaluating policy via REST for user ID: {} in company ID: {} on path: {}", userId, companyId, authRequest.resource());
         return webClientAuthority.post()
                 .uri("/api/v0/authorization/policy/check/companyId/{companyId}/userId/{userId}", companyId, userId)
                 .bodyValue(authRequest)
                 .retrieve()
                 .bodyToMono(PolicyResponseDTO.class)
-                .doOnNext(res -> logger.info("REST Response: {}", res));
+                .doOnNext(res -> logger.info("[evaluate] Successfully received REST policy evaluation response: isAllowed={}", res.isAllow()))
+                .doOnError(err -> logger.error("[evaluate] Failed to evaluate policy via REST for user ID: {}. Error: {}", userId, err.getMessage()));
     }
 }

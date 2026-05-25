@@ -35,8 +35,8 @@ public class AccountMembershipPlanGrpcService extends AccountMembershipPlanServi
     @Override
     public void getAccountMembershipPlanDetailByUserId(AccountMembershipPlanRequest request,
                                                        StreamObserver<AccountMembershipPlanResponse> responseObserver) {
-        log.info("Received gRPC request for account membership plan detail: companyId={}, userId={}, valueUserId={}",
-                request.getCompanyId(), request.getUserId(), request.getValueUserId());
+        log.info("[getAccountMembershipPlanDetailByUserId] Received gRPC request to fetch account membership plan detail for target user ID: {} requested by user ID: {} in company ID: {}",
+                request.getValueUserId(), request.getUserId(), request.getCompanyId());
 
         accountMembershipPlanService.getAccountMembershipPlanDetailByUserId(
                         request.getCompanyId(), request.getUserId(), request.getValueUserId())
@@ -47,7 +47,7 @@ public class AccountMembershipPlanGrpcService extends AccountMembershipPlanServi
                             responseObserver.onCompleted();
                         },
                         error -> {
-                            log.error("Error fetching account membership plan detail via gRPC", error);
+                            log.error("[getAccountMembershipPlanDetailByUserId] Internal error while fetching account membership plan detail via gRPC for target user ID: {}. Error: {}", request.getValueUserId(), error.getMessage());
                             responseObserver.onError(io.grpc.Status.INTERNAL
                                     .withDescription("Error during account membership plan retrieval: " + error.getMessage())
                                     .asRuntimeException());
@@ -57,7 +57,7 @@ public class AccountMembershipPlanGrpcService extends AccountMembershipPlanServi
 
     @Override
     public void updateAccountMembershipPlan(UpdateAccountMembershipPlanRequest request, StreamObserver<AccountMembershipPlanResponse> responseObserver) {
-        log.info("Received gRPC request for update account membership plan: valueUserId={}", request.getValueUserId());
+        log.info("[updateAccountMembershipPlan] Received gRPC request to update account membership plan for target user ID: {} requested by user ID: {} in company ID: {}", request.getValueUserId(), request.getUserId(), request.getCompanyId());
 
         accountMembershipPlanService.updateAccountMembershipPlan(
                         request.getCompanyId(),
@@ -73,7 +73,7 @@ public class AccountMembershipPlanGrpcService extends AccountMembershipPlanServi
                             responseObserver.onCompleted();
                         },
                         error -> {
-                            log.error("Error updating account membership plan via gRPC", error);
+                            log.error("[updateAccountMembershipPlan] Internal error while updating account membership plan via gRPC for target user ID: {}. Error: {}", request.getValueUserId(), error.getMessage());
                             responseObserver.onError(io.grpc.Status.INTERNAL
                                     .withDescription("Error during account membership plan update: " + error.getMessage())
                                     .asRuntimeException());

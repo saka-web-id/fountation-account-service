@@ -23,7 +23,7 @@ public class PolicyGrpcClientImpl implements PolicyClient {
 
     @Override
     public Mono<PolicyResponseDTO> evaluate(Long userId, Long companyId, PolicyRequestDTO authRequest) {
-        logger.info("Evaluating policy via gRPC: companyId={}, userId={}", companyId, userId);
+        logger.info("[evaluate] Evaluating policy via gRPC for user ID: {} in company ID: {} on path: {}", userId, companyId, authRequest.resource());
 
         PolicyRequest.Builder requestBuilder = mapper.toProto(authRequest).toBuilder()
                 .setCompanyId(companyId);
@@ -38,12 +38,14 @@ public class PolicyGrpcClientImpl implements PolicyClient {
             policyServiceStub.checkPolicy(request, new StreamObserver<PolicyResponse>() {
                 @Override
                 public void onNext(PolicyResponse response) {
-                    sink.success(mapper.toDTO(response));
+                    PolicyResponseDTO responseDTO = mapper.toDTO(response);
+                    logger.info("[evaluate] Successfully received gRPC policy evaluation response: isAllowed={}", responseDTO.isAllow());
+                    sink.success(responseDTO);
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    logger.error("gRPC error during policy check", t);
+                    logger.error("[evaluate] Failed to evaluate policy via gRPC for user ID: {}. Error: {}", userId, t.getMessage());
                     sink.error(t);
                 }
 

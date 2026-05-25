@@ -19,28 +19,28 @@ public class BillingCycleController {
 
     @GetMapping(value = "/account/membership/billing/cycle/list/companyId/{companyId}/userId/{userId}/valueCompanyId/{valueCompanyId}")
     public Flux<BillingCycleDTO> getBillingCycleList(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueCompanyId) {
-        log.info("Fetching getBillingCycleList userId: " + userId + " in companyId: " + companyId + " for valueCompanyId: " + valueCompanyId);
+        log.info("[getBillingCycleList] Fetching billing cycle list for company ID: {} requested by user ID: {} in company ID: {}", valueCompanyId, userId, companyId);
 
         return billingCycleService.getBillingCycleList(companyId, userId, valueCompanyId);
     }
 
     @GetMapping(value = "/account/membership/billing/cycle/detail/companyId/{companyId}/userId/{userId}/valueBillingIdId/{valueCompanyId}")
     public Mono<BillingCycleDTO> getBillingCycleDetail(@PathVariable Long companyId, @PathVariable Long userId, @PathVariable Long valueBillingIdId) {
-        log.info("Fetching getBillingCycleList userId: " + userId + " in companyId: " + companyId + " for valueBillingIdId: " + valueBillingIdId);
+        log.info("[getBillingCycleDetail] Fetching billing cycle detail for billing ID: {} requested by user ID: {} in company ID: {}", valueBillingIdId, userId, companyId);
 
         return billingCycleService.getBillingCycleDetail(companyId, userId, valueBillingIdId);
     }
     @PostMapping("/account/membership/billing/cycle/add/companyId/{companyId}/userId/{userId}")
     public Mono<BillingCycleDTO> postAddBillingCycle(@RequestBody Mono<BillingCycleDTO> payload, @PathVariable Long companyId, @PathVariable Long userId) {
         return payload.flatMap(billingCycle -> {
-            log.info("Adding BillingCycle: {} by userId: {} in companyId: {}", billingCycle, userId, companyId);
+            log.info("[postAddBillingCycle] Adding new billing cycle for company ID: {} initiated by user ID: {} in company ID: {}", billingCycle.companyId(), userId, companyId);
             return billingCycleService.saveBillingCycle(companyId, userId, billingCycle);
         });
     }
     @PostMapping("/account/membership/billing/cycle/update/companyId/{companyId}/userId/{userId}")
     public Mono<BillingCycleDTO> postUpdateBillingCycle(@RequestBody Mono<BillingCycleDTO> payload, @PathVariable Long companyId, @PathVariable Long userId) {
         return payload.flatMap(billingCycle -> {
-            log.info("Updating BillingCycle: {} by userId: {} in companyId: {}", billingCycle, userId, companyId);
+            log.info("[postUpdateBillingCycle] Updating billing cycle ID: {} initiated by user ID: {} in company ID: {}", billingCycle.id(), userId, companyId);
 
             return billingCycleService.saveBillingCycle(companyId, userId, billingCycle);
         });
